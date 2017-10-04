@@ -1,0 +1,2 @@
+como enviar dados entre components?
+usa props mas não entendi bem e não soube aplicar no meu projeto

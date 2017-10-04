@@ -5,7 +5,10 @@
         <h2>Quadribol</h2>
         <a href=""><img src="http://hdwallpaper20.com/wp-content/uploads/2016/07/harry-potter-wallpaper4-1024x576.jpg" alt="" class="img-fluid"></a>
         <p>Hogwarts é dividida em quatro Casas: Grifinória, Sonserina, Corvinal e Lufa-Lufa, veja defender sua casa nessa épica batalha de Quadribol </p>
-        <button type="button" class="btn btn-primary">Jogar</button>
+        
+        <router-link to="/Quadribol">
+          <button type="button" class="btn btn-primary">Jogar</button>
+        </router-link>
       </div>
     </div>
   </section>

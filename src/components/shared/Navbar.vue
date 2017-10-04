@@ -1,13 +1,13 @@
 <template>
 		
-	<nav class="navbar navbar-expand-lg navbar-light bg-light">
+	<nav class="navbar navbar-light bg-light">
 		<div class="container">
 			<a class="navbar-brand" href="#">Game</a>
-			<div class="list-nav"
+			<div class="list-nav">
 				<ul class="nav justify-content-end">
-				  <li class="nav-item">
-				    <router-link to="/Quadribol">Quadribol</router-link>
-				  </li>
+				  <router-link to="/Quadribol"><li class="nav-item">
+				    Quadribol
+				  </li></router-link>
 				</ul>
 			</div>
 		</div> 

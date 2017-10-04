@@ -1,65 +1,148 @@
 <template>
 	<section class="container quadribol">
 
-		<div class="select">
-			<h1>Escolhe Os Time </h1>
-			<div class="row justify-content-md-center">
-		
-				<div class="col col-md-4 itens">
-					<img v-bind:src="imageTeamOne" alt="">
-					<h5>Time 1: <span>{{ teamOne }}</span></h5>
-					<select class="form-control" v-model="teamOne">
-					  <option value="Corvinal" >Corvinal</option>
-					  <option value="Grifinória" >Grifinória</option>
-					  <option value="Lufa-Lufa" >Lufa-Lufa</option>
-					  <option value="Sonserina" >Sonserina</option>
-					</select>
-				</div>
-				<div class="col col-md-4 itens">
-					<img v-bind:src="imageTeamTwo" alt="">
-					<h5>Time 1: <span>{{ teamTwo }}</span></h5>
-
-					<select class="form-control" v-model="teamTwo">
-					  <option value="Corvinal" >Corvinal</option>
-					  <option value="Grifinória" >Grifinória</option>
-					  <option value="Lufa-Lufa" >Lufa-Lufa</option>
-					  <option value="Sonserina" >Sonserina</option>
-					</select>
-					<img src="">
+		<!-- Painel do Jogo -->
+		<transition name="painel-game" v-if="status == false">
+			<div class="game" >
+				<div class="content">
+					<h1>Jogando</h1>
+					<button type="button" class="btn btn-primary" v-on:click.prevent.stop="alert()" v-if="flagAlert == false">Selecionar novos times</button>
+					<button type="button" class="btn btn-primary">Jogar Novamente</button>
 				</div>
 			</div>
-		</div>
-		<br><br><br><br><br><br><br><br><br><br>
+		</transition>
+
+
+		<!-- painel de seleção do time -->
+		<transition name="painel-select">
+			<div class="select" v-if="status">
+				<!-- Alerta para quando os jogares escolherem os mesmos times -->
+				<div class="alert alert-danger" role="alert" id="flagAlert" v-if="flagAlert">
+				Infelizmente <strong>dois times iguais não podem se enfrenta</strong>, por favor escolha outro time.
+				</div>
+				<h1>Escolhe Os Time </h1>
+				<div class="row justify-content-md-center">
+				<!-- Time 1 -->
+					<div class="col col-md-4 itens">
+						<img v-bind:src="imageTeamOne" alt="">
+						<h5>Time 1: <span>{{ teamOne }}</span></h5>
+						<select class="form-control" v-model="teamOne">
+							<option value="Lufa-Lufa" >Lufa-Lufa</option>	
+							<option value="Corvinal" >Corvinal</option>
+							<option value="Grifinória" >Grifinória</option>
+							<option value="Sonserina" >Sonserina</option>
+						</select>
+					</div>
+					<!-- Time 2 -->
+					<div class="col col-md-4 itens">
+						<img v-bind:src="imageTeamTwo" alt="">
+						<h5>Time 2: <span>{{ teamTwo }}</span></h5>
+
+						<select class="form-control" v-model="teamTwo">
+							<option value="Lufa-Lufa" >Lufa-Lufa</option>	
+							<option value="Corvinal" >Corvinal</option>
+							<option value="Grifinória" >Grifinória</option>
+							<option value="Sonserina" >Sonserina</option>
+						</select>
+						<img src="">
+					</div>
+				</div>
+				
+				<button type="button" class="btn btn-danger" disabled v-if="flagAlert == true">Jogar</button>
+				<button type="button" class="btn btn-primary" v-on:click.prevent.stop="alert()" v-if="flagAlert == false">Jogar</button>
+			</div>
+		</transition>
+		
+		
+		
 	</section>
 </template>
 <script>
 	//Images dos Times
-	import LufaLufa from '././assets/quadribol/lufa-lufa.jpg';
+	import LufaLufa from '../assets/quadribol/lufa-lufa.jpg';
+	import Corvinal from '../assets/quadribol/corvinal.png';
+	import Grifinoria from '../assets/quadribol/grifinoria.jpg';
+	import Sonserina from '../assets/quadribol/sonserina.jpg';
+
 	export default{
 		name: 'Quadribol',
 		data(){
 			return{
-				status: '',
-				imageTeamOne: LufaLufa,
+				/*status: Verifica quem que tela o Jogador esta.
+					status: true = Tema de Seleção do time
+					status: false = Tema de Jogando	
+				*/
+				status: true,
 
-				imageTeamTwo: 'http://tu9srvbirvvtmjikdmlnbmv0dguud2lraweubm9jb29rawuubmv0.g00.wikia.com/g00/2_cHQtYnIuaGFycnlwb3R0ZXIud2lraWEuY29t_/TU9SRVBIRVVTMjIkaHR0cHM6Ly92aWduZXR0ZS53aWtpYS5ub2Nvb2tpZS5uZXQvaGFycnlwb3R0ZXIvaW1hZ2VzLzAvMDYvR19maW5hbF8lMjgxJTI5LmpwZy9yZXZpc2lvbi9sYXRlc3Q%2FY2I9MjAxMjExMTYwMTI3MzEmcGF0aC1wcmVmaXg9cHQtYnImaTEwYy5tYXJrLmltYWdlLnR5cGU%3D_$/$/$/$/$/$/$/$',
+				//Time 1
+				imageTeamOne: Grifinoria,
+				teamOne: 'Grifinória',
+				//Time 2
+				imageTeamTwo: LufaLufa,
+				teamTwo: 'Lufa-Lufa',
 
-				teamOne: 'Lufa-Lufa',
-				teamTwo: 'Grifinória',
-				
+				/*	flagAlert: Verifica se dois time selecionados são iguais
+						flagAlert: false = Não mostra o alerta
+						flagAlert: true = mostra o alerta 
+				*/
+				flagAlert: false
 			}
 		},
 		watch: {
+
+			//Time 1
+			teamOne: function(){
+				// Verificar se os Times escollhidos são iguais
+				if(this.teamOne == this.teamTwo){
+					this.flagAlert = true
+				}else{
+					this.flagAlert = false
+				}
+				// Verifica qual o Time escolhido e de acoro com ele, muda a Imagem
+				if(this.teamOne == 'Lufa-Lufa'){
+					this.imageTeamOne = LufaLufa
+				}
+				else if (this.teamOne == 'Corvinal') {
+					this.imageTeamOne = Corvinal
+				}
+				else if(this.teamOne  == 'Grifinória'){
+					this.imageTeamOne = Grifinoria
+				}
+				else if(this.teamOne  == 'Sonserina'){
+					this.imageTeamOne = Sonserina
+				}
+			},
+
+			//Time 2
 			teamTwo: function(){
-				//Time 1
-				if(this.teamOne == 'Corvinal'){
-					this.imageTeamOne = 'http://c-6rtwjumjzx7877x24anlsjyyjx2ebnpnfx2esthttpnjx2esjy.g00.wikia.com/g00/3_c-6uy-gw.mfwwdutyyjw.bnpnf.htr_/c-6RTWJUMJZX77x24myyux78x3ax2fx2fanlsjyyj.bnpnf.sthttpnj.sjyx2fmfwwdutyyjwx2fnrfljx78x2f5x2f52x2fWfajshqfb_x2573Xx25H8x25FIrgtqt_Htwansfqx2574.uslx2fwjanx78ntsx2fqfyjx78yx3fhgx3d75625879779483x26ufym-uwjkncx3duy-gwx26n65h.rfwp.nrflj.yduj_$/$/$/$/$/$/$/$'
+				// Verificar se os Times escollhidos são iguais
+				if(this.teamOne == this.teamTwo){
+					this.flagAlert = true
+				}else{
+					this.flagAlert = false
 				}
-				else if (this.teamOne == 'Grifinória') {
-					this.imageTeamOne = 'http://tu9srvbirvvtmjikdmlnbmv0dguud2lraweubm9jb29rawuubmv0.g00.wikia.com/g00/2_cHQtYnIuaGFycnlwb3R0ZXIud2lraWEuY29t_/TU9SRVBIRVVTMjIkaHR0cHM6Ly92aWduZXR0ZS53aWtpYS5ub2Nvb2tpZS5uZXQvaGFycnlwb3R0ZXIvaW1hZ2VzLzAvMDYvR19maW5hbF8lMjgxJTI5LmpwZy9yZXZpc2lvbi9sYXRlc3Q%2FY2I9MjAxMjExMTYwMTI3MzEmcGF0aC1wcmVmaXg9cHQtYnImaTEwYy5tYXJrLmltYWdlLnR5cGU%3D_$/$/$/$/$/$/$/$'
+
+				// Verifica qual o Time escolhido e de acoro com ele, muda a Imagem
+				if(this.teamTwo == 'Lufa-Lufa'){
+					this.imageTeamTwo = LufaLufa
 				}
-				else if(this.teamOne  == 'Lufa-Lufa'){
-					this.imageTeamTwo = 'http://c-6rtwjumjzx7877x24anlsjyyjx2ebnpnfx2esthttpnjx2esjy.g00.wikia.com/g00/3_c-6uy-gw.mfwwdutyyjw.bnpnf.htr_/c-6RTWJUMJZX77x24myyux78x3ax2fx2fanlsjyyj.bnpnf.sthttpnj.sjyx2fmfwwdutyyjwx2fnrfljx78x2f8x2f8kx2fM_knsfq.oulx2fwjanx78ntsx2fqfyjx78yx3fhgx3d75676656670693x26ufym-uwjkncx3duy-gwx26n65h.rfwp.nrflj.yduj_$/$/$/$/$/$/$/$'
+				else if (this.teamTwo == 'Corvinal') {
+					this.imageTeamTwo = Corvinal
+				}
+				else if(this.teamTwo  == 'Grifinória'){
+					this.imageTeamTwo = Grifinoria
+				}
+				else if(this.teamTwo  == 'Sonserina'){
+					this.imageTeamTwo = Sonserina
+				}
+			}
+		},
+		methods:{
+			alert(){
+				if(this.status == true){
+					this.status = false
+				}else{
+					this.status = true
 				}
 			}
 		}
@@ -70,6 +153,14 @@
 
 .quadribol{
 	color: rgba(0,0,0,0.54) !important;
+	height: 100%;
+	margin-bottom: 40px;
+	
+}
+.game{
+	margin-top: 100px;
+}
+.select h1, .alert-danger{
 	margin-top: 40px;
 }
 .itens{
@@ -87,5 +178,23 @@
 	margin-bottom:32px;
 	height: 250px;
 }
-	
+
+/*	painel-fade-enter  =  antes do elemento ser incluído ou removido, o estado atual
+	painel-fade-enter-active == quando o elemento esta sendo incluído
+	painel-fade-leave-active == quando o elemento esta sendo removido
+*/
+.painel-select-enter, .painel-select-leave-active {
+  opacity: 0;
+}
+
+.painel-select-enter-active, .painel-select-leave-active {
+  transition: opacity .8s;
+}
+.painel-game-enter, .painel-game-leave-active {
+  opacity: 0;
+}
+
+.painel-game-enter-active, .painel-game-leave-active {
+  transition: opacity .4s
+}
 </style>
