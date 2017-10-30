@@ -1,12 +1,50 @@
 <template>
 	<section class="container quadribol">
-
 		<!-- Painel do Jogo -->
 		<transition name="painel-game" v-if="status == false">
 			<div class="game" >
 				<div class="content">
-					<h1>Jogando</h1>
-					<button type="button" class="btn btn-primary" v-on:click.prevent.stop="alert()" v-if="flagAlert == false">Selecionar novos times</button>
+					<div v-if="false">
+						<h1>Parabén o time ganhou</h1>
+					</div>
+					<div class="row justify-content-md-center">
+						<!-- Time 1 -->
+						<div class="col col-md-4 itens">
+							<img :src="imageTeamOne" alt="">
+							<div class="points">
+								<button type="button" class="btn btn-primary">{{ pointsTeamOne }}</button>
+							</div>
+							<div class="points">
+								<div class="points-itens">
+									<img src="http://tshpt.weebly.com/uploads/1/1/3/8/11383476/1210994_orig.jpg" alt="Goles: 10 Pontos" title="Goles: 10 Pontos" v-on:click="golesTeamOne()">
+									<p>Goles</p>
+								</div>
+								<div class="points-itens">
+									<img src="https://i.pinimg.com/736x/ab/0c/9f/ab0c9f3dc2425b9b9404d0758ed32bb0--golden-snitch-tattoo-snitch-dorada.jpg" alt="Pomo de ouro: 150 pontos" title="Pomo de ouro: 150 pontos" v-on:click="pomoTeamOne()">
+									<p>Pomo de ouro</p>
+								</div>
+							</div>
+						</div>
+						
+						<!-- Time 2 -->
+						<div class="col col-md-4 itens">
+							<img :src="imageTeamTwo" alt="">
+							<div class="points">
+								<button type="button" class="btn btn-primary">{{ pointsTeamTwo }}</button>
+							</div>
+							<div class="points">
+								<div class="points-itens">
+									<img src="http://tshpt.weebly.com/uploads/1/1/3/8/11383476/1210994_orig.jpg" alt="Goles: 10 Pontos" title="Goles: 10 Pontos"  v-on:click="golesTeamTwo()">
+									<p>Goles</p>
+								</div>
+								<div class="points-itens">
+									<img src="https://i.pinimg.com/736x/ab/0c/9f/ab0c9f3dc2425b9b9404d0758ed32bb0--golden-snitch-tattoo-snitch-dorada.jpg" alt="Pomo de ouro: 150 pontos" title="Pomo de ouro: 150 pontos" v-on:click="pomoTeamTwo()">
+									<p>Pomo de ouro</p>
+								</div>
+							</div>
+						</div>
+					</div>
+					<button type="button" class="btn btn-primary" v-on:click.stop="alert()" v-if="flagAlert == false">Selecionar novos times</button>
 					<button type="button" class="btn btn-primary">Jogar Novamente</button>
 				</div>
 			</div>
@@ -20,7 +58,7 @@
 				<div class="alert alert-danger" role="alert" id="flagAlert" v-if="flagAlert">
 				Infelizmente <strong>dois times iguais não podem se enfrenta</strong>, por favor escolha outro time.
 				</div>
-				<h1>Escolhe Os Time </h1>
+				<h1>Escolha seu Time </h1>
 				<div class="row justify-content-md-center">
 				<!-- Time 1 -->
 					<div class="col col-md-4 itens">
@@ -52,9 +90,6 @@
 				<button type="button" class="btn btn-primary" v-on:click.prevent.stop="alert()" v-if="flagAlert == false">Jogar</button>
 			</div>
 		</transition>
-		
-		
-		
 	</section>
 </template>
 <script>
@@ -63,11 +98,15 @@
 	import Corvinal from '../assets/quadribol/corvinal.png';
 	import Grifinoria from '../assets/quadribol/grifinoria.jpg';
 	import Sonserina from '../assets/quadribol/sonserina.jpg';
-
+	import Menssagens from '@/components/Menssagens';
 	export default{
 		name: 'Quadribol',
+		 components:{
+		    Menssagens
+		  },
 		data(){
 			return{
+				texte123:"h1:{'teste'}",
 				/*status: Verifica quem que tela o Jogador esta.
 					status: true = Tema de Seleção do time
 					status: false = Tema de Jogando	
@@ -77,9 +116,11 @@
 				//Time 1
 				imageTeamOne: Grifinoria,
 				teamOne: 'Grifinória',
+				pointsTeamOne: 0,
 				//Time 2
 				imageTeamTwo: LufaLufa,
 				teamTwo: 'Lufa-Lufa',
+				pointsTeamTwo: 0,
 
 				/*	flagAlert: Verifica se dois time selecionados são iguais
 						flagAlert: false = Não mostra o alerta
@@ -89,7 +130,6 @@
 			}
 		},
 		watch: {
-
 			//Time 1
 			teamOne: function(){
 				// Verificar se os Times escollhidos são iguais
@@ -110,6 +150,12 @@
 				}
 				else if(this.teamOne  == 'Sonserina'){
 					this.imageTeamOne = Sonserina
+				}
+			},
+			//Pontos Time 1
+			pointsTeamOne: function(){
+				if(this.pointsTeamOne >= 150) {
+					console.log('ganhou')
 				}
 			},
 
@@ -144,6 +190,9 @@
 				}else{
 					this.status = true
 				}
+			},
+			golesTeamOne(){
+				this.pointsTeamOne = this.pointsTeamOne + 10
 			}
 		}
 	}
@@ -158,10 +207,28 @@
 	
 }
 .game{
-	margin-top: 100px;
+	margin-top: 32px;
+}
+.points{
+	display: flex; 
+}
+.points img{
+	cursor: pointer;
+	height: 70px !important;
+	margin-bottom: 16px !important;
+}
+.points button{
+	width: 115px;
+    height: 100px;
+    font-size: 45px;
+    margin: 0 auto;
+    margin-bottom: 32px;
 }
 .select h1, .alert-danger{
-	margin-top: 40px;
+	padding-top: 40px;
+}
+.points-itens{
+	width: 100%;
 }
 .itens{
 	text-align: center;
@@ -195,6 +262,6 @@
 }
 
 .painel-game-enter-active, .painel-game-leave-active {
-  transition: opacity .4s
+  transition: opacity .8s
 }
 </style>
